@@ -3,13 +3,11 @@ package com.jizumer.sockmerchant;
 import com.jizumer.Runner;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * https://www.hackerrank.com/challenges/sock-merchant
@@ -51,4 +49,6 @@ public class SockMerchantRunner implements Runner {
 
         scanner.close();
     }
+
+
 }

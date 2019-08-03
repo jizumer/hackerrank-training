@@ -2,16 +2,8 @@ package com.jizumer.plusminus;
 
 import com.jizumer.Runner;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 public class PlusMinusRunner implements Runner {
     // Complete the plusMinus function below.
