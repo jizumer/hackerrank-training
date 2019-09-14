@@ -2,7 +2,6 @@ package com.jizumer.stringpermutation;
 
 import com.jizumer.Runner;
 
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;

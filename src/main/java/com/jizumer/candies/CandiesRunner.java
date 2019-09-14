@@ -2,17 +2,11 @@ package com.jizumer.candies;
 
 import com.jizumer.Runner;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * https://www.hackerrank.com/challenges/candies

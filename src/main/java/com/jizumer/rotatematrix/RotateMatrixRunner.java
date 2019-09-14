@@ -1,9 +1,9 @@
 package com.jizumer.rotatematrix;
 
+import com.jizumer.Runner;
+
 import java.io.IOException;
 import java.util.Scanner;
-
-import com.jizumer.Runner;
 
 public class RotateMatrixRunner implements Runner {
 
