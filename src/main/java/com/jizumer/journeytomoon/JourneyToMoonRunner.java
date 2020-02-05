@@ -3,59 +3,62 @@ package com.jizumer.journeytomoon;
 import com.jizumer.Runner;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
 
 public class JourneyToMoonRunner implements Runner {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static boolean[][] groupByCountry(int[][] astronaut, int numberOfAstronauts) {
-        boolean[][] nationalities = new boolean[numberOfAstronauts][numberOfAstronauts];
-        int couplesReceived = astronaut.length;
-        for (int i = 0; i < couplesReceived; i++) {
-            nationalities[astronaut[i][0]][astronaut[i][1]] = true;
-            nationalities[astronaut[i][1]][astronaut[i][0]] = true;
+    private static int[] astronautsPerCountry(int[][] astronaut, int numberOfAstronauts) {
+
+        List<List<Integer>> nationalities = new ArrayList<>(numberOfAstronauts);
+        int n = astronaut.length;
+        for (int i = 0; i < n; i++) {
+            List<Integer> countryOfFirstAstronaut = countryOfAstronaut(nationalities, astronaut[i][0]);
+            List<Integer> countryOfSecondAstronaut = countryOfAstronaut(nationalities, astronaut[i][1]);
+            mergeCountries(nationalities, countryOfFirstAstronaut, countryOfSecondAstronaut);
         }
-        printMatrix(nationalities);
-        return nationalities;
+        int[] numberOfAstronautsPerCountry = new int[nationalities.size()];
+        int i = 0;
+        for (List<Integer> country : nationalities) {
+            numberOfAstronautsPerCountry[i] = country.size();
+            i++;
+        }
+        return numberOfAstronautsPerCountry;
+
     }
 
-    private static int numberOfPossibleCouples(boolean[][] astronautsPerCountry, int numberOfAstronauts) {
-        int couples = 0;
-        for (int i = 0; i < numberOfAstronauts; i++) {
-            for (int j = i + 1; j < numberOfAstronauts; j++) {
-                if (!astronautsPerCountry[i][j]) {
-                    couples++;
-                } else {
-                    for (int k = numberOfAstronauts - 1; k >= 0; k--) {
-                        if (astronautsPerCountry[i][k] && k != j) {
-                            astronautsPerCountry[k][j] = true;
-                            astronautsPerCountry[j][k] = true;
-                            couples--;
-                        }
-                    }
-                }
+    private static List<Integer> countryOfAstronaut(List<List<Integer>> nationalities, int i) {
+        List<Integer> country = null;
+        for (List<Integer> nationality : nationalities) {
+            if (nationality.contains(i)) {
+                country = nationality;
             }
         }
-        return couples;
-    }
-
-    public static void printMatrix(boolean[][] matrix) {
-
-        for (int i = 0; i < matrix.length; i++) {         //this equals to the row in our matrix.
-            for (int j = 0; j < matrix[i].length; j++) {   //this equals to the column in each row.
-                System.out.print(((matrix[i][j]) ? "1" : "0") + "\t");
-            }
-            System.out.println(); //change line on console as row comes to end in the matrix.
+        if (country == null) {
+            country = new ArrayList<Integer>();
+            country.add(Integer.valueOf(i));
+            nationalities.add(country);
         }
+        return country;
     }
+
+    private static void mergeCountries(List<List<Integer>> nationalities, List<Integer> countryOfFirstAstronaut, List<Integer> countryOfSecondAstronaut) {
+        countryOfFirstAstronaut.addAll(countryOfSecondAstronaut);
+        nationalities.remove(countryOfSecondAstronaut);
+    }
+
 
     // Complete the journeyToMoon function below.
     int journeyToMoon(int n, int[][] astronaut) {
-        boolean[][] astronautsPerCountry = groupByCountry(astronaut, n);
-        int couples = numberOfPossibleCouples(astronautsPerCountry, n);
-        System.out.println(couples);
-        printMatrix(astronautsPerCountry);
-        return couples;
+        int[] astronautsPerCountry = astronautsPerCountry(astronaut, n);
+        int numberOfCountries = astronautsPerCountry.length;
+        int pairs = 0;
+        for (int i = 0; i < numberOfCountries - 1; i++) {
+            for (int j = i + 1; j < numberOfCountries; j++) {
+                pairs += astronautsPerCountry[i] * astronautsPerCountry[j];
+            }
+        }
+        return pairs;
     }
 
     @Override
