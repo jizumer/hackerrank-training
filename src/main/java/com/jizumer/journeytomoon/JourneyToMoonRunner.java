@@ -3,26 +3,37 @@ package com.jizumer.journeytomoon;
 import com.jizumer.Runner;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class JourneyToMoonRunner implements Runner {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static int[] astronautsPerCountry(int[][] astronaut, int numberOfAstronauts) {
+    private static List<Integer> astronautsPerCountry(int[][] astronaut, int numberOfAstronauts) {
 
         List<List<Integer>> nationalities = new ArrayList<>(numberOfAstronauts);
         int n = astronaut.length;
         for (int i = 0; i < n; i++) {
             List<Integer> countryOfFirstAstronaut = countryOfAstronaut(nationalities, astronaut[i][0]);
             List<Integer> countryOfSecondAstronaut = countryOfAstronaut(nationalities, astronaut[i][1]);
-            mergeCountries(nationalities, countryOfFirstAstronaut, countryOfSecondAstronaut);
+
+            if (!countryOfFirstAstronaut.equals(countryOfSecondAstronaut)) {
+                mergeCountries(nationalities, countryOfFirstAstronaut, countryOfSecondAstronaut);
+            }
         }
-        int[] numberOfAstronautsPerCountry = new int[nationalities.size()];
-        int i = 0;
+        List<Integer> numberOfAstronautsPerCountry = new ArrayList<>(numberOfAstronauts - 1);
+        int differentProposedAstronauts = 0;
         for (List<Integer> country : nationalities) {
-            numberOfAstronautsPerCountry[i] = country.size();
-            i++;
+            int astronautsInThisCountry = country.size();
+            differentProposedAstronauts += astronautsInThisCountry;
+            numberOfAstronautsPerCountry.add(astronautsInThisCountry);
         }
+
+        for (int i = 0; i < (numberOfAstronauts - differentProposedAstronauts); i++) {
+            numberOfAstronautsPerCountry.add(1);
+        }
+
         return numberOfAstronautsPerCountry;
 
     }
@@ -49,15 +60,16 @@ public class JourneyToMoonRunner implements Runner {
 
 
     // Complete the journeyToMoon function below.
-    int journeyToMoon(int n, int[][] astronaut) {
-        int[] astronautsPerCountry = astronautsPerCountry(astronaut, n);
-        int numberOfCountries = astronautsPerCountry.length;
+    static int journeyToMoon(int n, int[][] astronaut) {
+        List<Integer> astronautsPerCountry = astronautsPerCountry(astronaut, n);
+        int numberOfCountries = astronautsPerCountry.size();
         int pairs = 0;
         for (int i = 0; i < numberOfCountries - 1; i++) {
             for (int j = i + 1; j < numberOfCountries; j++) {
-                pairs += astronautsPerCountry[i] * astronautsPerCountry[j];
+                pairs += astronautsPerCountry.get(i) * astronautsPerCountry.get(j);
             }
         }
+
         return pairs;
     }
 
