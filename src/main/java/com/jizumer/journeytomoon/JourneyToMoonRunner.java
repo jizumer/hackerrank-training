@@ -10,7 +10,12 @@ import java.util.Scanner;
 public class JourneyToMoonRunner implements Runner {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static List<Integer> astronautsPerCountry(int[][] astronaut, int numberOfAstronauts) {
+    private static class AstronautsPerCountryResult {
+        List<Integer> numberOfAstronautsPerCountry;
+        int numberOfNotProposedAstronauts;
+    }
+
+    private static AstronautsPerCountryResult astronautsPerCountry(int[][] astronaut, int numberOfAstronauts) {
 
         List<List<Integer>> nationalities = new ArrayList<>(numberOfAstronauts);
         int n = astronaut.length;
@@ -30,11 +35,11 @@ public class JourneyToMoonRunner implements Runner {
             numberOfAstronautsPerCountry.add(astronautsInThisCountry);
         }
 
-        for (int i = 0; i < (numberOfAstronauts - differentProposedAstronauts); i++) {
-            numberOfAstronautsPerCountry.add(1);
-        }
+        AstronautsPerCountryResult result = new AstronautsPerCountryResult();
+        result.numberOfAstronautsPerCountry = numberOfAstronautsPerCountry;
+        result.numberOfNotProposedAstronauts = numberOfAstronauts - differentProposedAstronauts;
 
-        return numberOfAstronautsPerCountry;
+        return result;
 
     }
 
@@ -61,14 +66,31 @@ public class JourneyToMoonRunner implements Runner {
 
     // Complete the journeyToMoon function below.
     static int journeyToMoon(int n, int[][] astronaut) {
-        List<Integer> astronautsPerCountry = astronautsPerCountry(astronaut, n);
+        AstronautsPerCountryResult astronautsPerCountryResult = astronautsPerCountry(astronaut, n);
+
+        List<Integer> astronautsPerCountry = astronautsPerCountryResult.numberOfAstronautsPerCountry;
+        System.out.println("{" + astronautsPerCountryResult.numberOfAstronautsPerCountry.size() + "," + astronautsPerCountryResult.numberOfNotProposedAstronauts + "}");
         int numberOfCountries = astronautsPerCountry.size();
         int pairs = 0;
         for (int i = 0; i < numberOfCountries - 1; i++) {
             for (int j = i + 1; j < numberOfCountries; j++) {
+                System.out.print(pairs + "+=" + astronautsPerCountry.get(i) + "*"+ astronautsPerCountry.get(j)+ " = ");
                 pairs += astronautsPerCountry.get(i) * astronautsPerCountry.get(j);
+                System.out.println(pairs);
             }
         }
+
+        for(int i = 0 ; i < numberOfCountries; i++){
+            //count the not-proposed astronauts
+            System.out.println("Count not propossed");
+            System.out.print(pairs + "+=" + astronautsPerCountry.get(i) + "*"+ astronautsPerCountryResult.numberOfNotProposedAstronauts+ " = ");
+            pairs += astronautsPerCountry.get(i) * astronautsPerCountryResult.numberOfNotProposedAstronauts;
+            System.out.println(pairs);
+        }
+        if(astronautsPerCountryResult.numberOfNotProposedAstronauts > 1) {
+            pairs += (astronautsPerCountryResult.numberOfNotProposedAstronauts - 1);
+        }
+
 
         return pairs;
     }
